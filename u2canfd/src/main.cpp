@@ -102,148 +102,50 @@ int main(int argc, char** argv)
       uint16_t mstid5 = 0x15;
       uint16_t canid6 = 0x06;
       uint16_t mstid6 = 0x16;
-      uint16_t canid7 = 0x07;
-      uint16_t mstid7 = 0x17;
-      uint16_t canid8 = 0x08;
-      uint16_t mstid8 = 0x18;
-      uint16_t canid9 = 0x09;
-      uint16_t mstid9 = 0x19;
       
       uint32_t nom_baud =1000000;
       uint32_t dat_baud =5000000;
 
       std::vector<damiao::DmActData> init_data;
-      std::vector<damiao::DmActData> init_data2;
 
       init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
                                             .mode = damiao::MIT_MODE,
                                             .can_id=canid1,
                                             .mst_id=mstid1,
                                             .channel=CHANNEL0 });
-                                            
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid2,
-      //   .mst_id=mstid2,
-      //   .channel=CHANNEL0});
 
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid3,
-      //   .mst_id=mstid3,
-      //   .channel=CHANNEL0 });
+      init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
+                                            .mode = damiao::MIT_MODE,
+                                            .can_id=canid2,
+                                            .mst_id=mstid2,
+                                            .channel=CHANNEL0 });
 
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid4,
-      //   .mst_id=mstid4,
-      //   .channel=CHANNEL0 });
+      init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
+                                            .mode = damiao::MIT_MODE,
+                                            .can_id=canid3,
+                                            .mst_id=mstid3,
+                                            .channel=CHANNEL0 });
 
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid5,
-      //   .mst_id=mstid5,
-      //   .channel=CHANNEL0 });
+      init_data.push_back(damiao::DmActData{.motorType = damiao::DMH3510,
+                                            .mode = damiao::MIT_MODE,
+                                            .can_id=canid4,
+                                            .mst_id=mstid4,
+                                            .channel=CHANNEL0 });
 
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid6,
-      //   .mst_id=mstid6,
-      //   .channel=CHANNEL0 });
-      
+      init_data.push_back(damiao::DmActData{.motorType = damiao::DMH3510,
+                                            .mode = damiao::MIT_MODE,
+                                            .can_id=canid5,
+                                            .mst_id=mstid5,
+                                            .channel=CHANNEL0 });
 
-      //  init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid7,
-      //   .mst_id=mstid7,
-      //   .channel=CHANNEL0 });
-
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid8,
-      //   .mst_id=mstid8,
-      //   .channel=CHANNEL0 });
-
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid9,
-      //   .mst_id=mstid9,
-      //   .channel=CHANNEL0 });
-
-      
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //                                       .mode = damiao::MIT_MODE,
-      //                                       .can_id=canid1,
-      //                                       .mst_id=mstid1,
-      //                                       .channel=CHANNEL1 });
-                                            
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid2,
-      //   .mst_id=mstid2,
-      //   .channel=CHANNEL1});
-
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid3,
-      //   .mst_id=mstid3,
-      //   .channel=CHANNEL1 });
-
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid4,
-      //   .mst_id=mstid4,
-      //   .channel=CHANNEL1 });
-
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid5,
-      //   .mst_id=mstid5,
-      //   .channel=CHANNEL1 });
-
-      // init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid6,
-      //   .mst_id=mstid6,
-      //   .channel=CHANNEL1 });
-      // init_data2.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //                                       .mode = damiao::MIT_MODE,
-      //                                       .can_id=canid1,
-      //                                       .mst_id=mstid1,
-      //                                       .channel=CHANNEL0 });
-                                            
-      // init_data2.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid2,
-      //   .mst_id=mstid2,
-      //   .channel=CHANNEL0});
-
-      // init_data2.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid3,
-      //   .mst_id=mstid3,
-      //   .channel=CHANNEL0 });
-
-      // init_data2.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid4,
-      //   .mst_id=mstid4,
-      //   .channel=CHANNEL0 });
-
-      // init_data2.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid5,
-      //   .mst_id=mstid5,
-      //   .channel=CHANNEL0 });
-
-      // init_data2.push_back(damiao::DmActData{.motorType = damiao::DM4310,
-      //   .mode = damiao::MIT_MODE,
-      //   .can_id=canid6,
-      //   .mst_id=mstid6,
-      //   .channel=CHANNEL0 });
+      init_data.push_back(damiao::DmActData{.motorType = damiao::DMH3510,
+                                            .mode = damiao::MIT_MODE,
+                                            .can_id=canid6,
+                                            .mst_id=mstid6,
+                                            .channel=CHANNEL0 });
       
         control = std::make_shared<damiao::Motor_Control>(
-        DEV_USB2CANFD,nom_baud,dat_baud,"CB7137534B9DB4B3781310BC81DAABC1",&init_data);
+        DEV_USB2CANFD,nom_baud,dat_baud,"24B3E941BE0474C0E833BFF8F3C6EB68",&init_data);
         //接收回调函数注册
         device_hook_to_rec(control->getUSBHw()->getDeviceHandle(),canframeCallback);
 
@@ -258,31 +160,12 @@ int main(int argc, char** argv)
         const duration desired_duration(0.001); // 计算期望周期
         auto current_time = clock::now();
        
-        control->control_mit(*control->getMotor(CHANNEL0,canid1), 0.0, 0.0, 0.0, 0.0, 0.5);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid2), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid3), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid4), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid5), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid6), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid7), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid8), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control->control_mit(*control->getMotor(CHANNEL0,canid9), 0.0, 0.0, 0.0, 0.0, 0.0);
-
-        // control2->control_mit(*control2->getMotor(CHANNEL0,canid1), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control2->control_mit(*control2->getMotor(CHANNEL0,canid2), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control2->control_mit(*control2->getMotor(CHANNEL0,canid3), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control2->control_mit(*control2->getMotor(CHANNEL0,canid4), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control2->control_mit(*control2->getMotor(CHANNEL0,canid5), 0.0, 0.0, 0.0, 0.0, 0.0);
-        // control2->control_mit(*control2->getMotor(CHANNEL0,canid6), 0.0, 0.0, 0.0, 0.0, 0.0);
-
-        // for(uint16_t id = 1;id<=1;id++)
-        // {
-        //   float pos=control2->getMotor(CHANNEL0,id)->Get_Position();
-        //   float vel=control2->getMotor(CHANNEL0,id)->Get_Velocity();
-        //   float tau=control2->getMotor(CHANNEL0,id)->Get_tau();
-        //   double time=control2->getMotor(CHANNEL0,id)->getTimeInterval();
-        //   std::cerr<<"id is: "<<id<<" pos: "<<pos<<" vel: "<<vel<<" effort: "<<tau<<" time(s): "<<time<<std::endl;
-        // }
+        control->control_mit(*control->getMotor(CHANNEL0,canid1), 0.0, 0.0, 0.0, 0.0, 0.0);
+        control->control_mit(*control->getMotor(CHANNEL0,canid2), 0.0, 0.0, 0.0, 0.0, 0.0);
+        control->control_mit(*control->getMotor(CHANNEL0,canid3), 0.0, 0.0, 0.0, 0.0, 0.0);
+        control->control_mit(*control->getMotor(CHANNEL0,canid4), 0.0, 0.0, 0.0, 0.0, 0.0);
+        control->control_mit(*control->getMotor(CHANNEL0,canid5), 0.0, 0.0, 0.0, 0.0, 0.0);
+        control->control_mit(*control->getMotor(CHANNEL0,canid6), 0.0, 0.0, 0.0, 0.0, 0.0);
 
         for(uint16_t id = 1;id<=1;id++)
         {
