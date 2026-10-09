@@ -1,0 +1,9 @@
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/libconsole_bridge.so.1.0
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/libconsole_bridge.so
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/include/console_bridge/console.h
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/include/console_bridge/console_bridge_export.h
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/console_bridge/cmake/console_bridge-targets.cmake
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/console_bridge/cmake/console_bridge-targets-release.cmake
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/console_bridge/cmake/console_bridge-config.cmake
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/console_bridge/cmake/console_bridge-config-version.cmake
+/home/huang/workspace/rk3566_project/lib/pinocchio/stage-x86_64/usr/lib/pkgconfig/console_bridge.pc

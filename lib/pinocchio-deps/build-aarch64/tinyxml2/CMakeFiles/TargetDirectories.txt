@@ -1,0 +1,7 @@
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/tinyxml2.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/edit_cache.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/rebuild_cache.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/list_install_components.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/install.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/install/local.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/tinyxml2/CMakeFiles/install/strip.dir

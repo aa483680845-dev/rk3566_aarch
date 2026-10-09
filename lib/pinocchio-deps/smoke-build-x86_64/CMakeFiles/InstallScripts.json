@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/huang/workspace/rk3566_project/lib/pinocchio-deps/smoke-build-x86_64/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

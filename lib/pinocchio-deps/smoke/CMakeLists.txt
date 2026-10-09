@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.22)
+project(pinocchio_smoke LANGUAGES CXX)
+find_package(pinocchio REQUIRED CONFIG)
+add_executable(pinocchio_smoke main.cpp)
+target_link_libraries(pinocchio_smoke PRIVATE pinocchio::pinocchio)
+target_compile_features(pinocchio_smoke PRIVATE cxx_std_17)

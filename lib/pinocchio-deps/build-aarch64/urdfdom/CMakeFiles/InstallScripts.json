@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/urdfdom/cmake_install.cmake",
+		"/home/huang/workspace/rk3566_project/lib/pinocchio-deps/build-aarch64/urdfdom/urdf_parser/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

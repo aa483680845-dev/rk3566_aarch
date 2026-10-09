@@ -1,0 +1,3 @@
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/smoke-build-aarch64/CMakeFiles/pinocchio_smoke.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/smoke-build-aarch64/CMakeFiles/edit_cache.dir
+/home/huang/workspace/rk3566_project/lib/pinocchio-deps/smoke-build-aarch64/CMakeFiles/rebuild_cache.dir

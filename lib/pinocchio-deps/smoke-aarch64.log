@@ -1,0 +1,26 @@
+-- The CXX compiler identification is GNU 13.3.1
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /home/huang/toolchains/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Warning (dev) at /opt/st/stm32cubeclt_1.22.0/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:93 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  /opt/st/stm32cubeclt_1.22.0/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)
+  /home/huang/workspace/rk3566_project/lib/pinocchio/stage-aarch64/usr/lib/cmake/pinocchio/pinocchioConfig.cmake:182 (find_dependency)
+  CMakeLists.txt:3 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boost: /home/huang/workspace/rk3566_project/lib/pinocchio/stage-aarch64/usr/include (found version "1.83.0") found components: filesystem serialization
+-- Minimal C++ standard upgraded to 17
+-- Incompatible C++ standard detected: upgrade required from 98 to >= 17
+-- CMAKE_CXX_STANDARD automatically upgraded from 98 to 17
+-- Configuring done (0.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/huang/workspace/rk3566_project/lib/pinocchio-deps/smoke-build-aarch64
+[1/2] Building CXX object CMakeFiles/pinocchio_smoke.dir/main.cpp.o
+[2/2] Linking CXX executable pinocchio_smoke
