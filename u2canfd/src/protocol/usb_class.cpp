@@ -99,7 +99,6 @@ void usb_class::usb_clear()
         device_close_channel(usb_dev,0);
         device_close_channel(usb_dev,1);     
     }
-    _exit(EXIT_FAILURE);
     //关闭设备
     device_close(usb_dev);
     
@@ -225,7 +224,7 @@ int usb_class::usb_open(std::string str)
 void usb_class::fdcanFrameSend(std::vector< uint8_t>& data,uint32_t canId, uint8_t ch)
 {   
     uint8_t* payload = data.data();
-    device_channel_send_fast(usb_dev,ch,canId,1,false,true,true,8,payload);
+    device_channel_send_fast(usb_dev,ch,canId,1,false,false,false,8,payload);
 }
 
 

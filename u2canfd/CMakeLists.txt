@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(dm_main LANGUAGES CXX)
+include(CTest)
 
 # 两个可执行文件统一使用 C++17。
 set(CMAKE_CXX_STANDARD 17)
@@ -36,6 +37,20 @@ else()
     message(FATAL_ERROR "Unsupported architecture: ${U2CAN_ARCH}")
 endif()
 
+# Use the Pinocchio installation built for the selected compiler target.
+set(PROJECT_PINOCCHIO_PREFIX
+        "${CMAKE_CURRENT_SOURCE_DIR}/../lib/pinocchio/stage-${U2CAN_ARCH}/usr")
+if(NOT EXISTS "${PROJECT_PINOCCHIO_PREFIX}/lib/cmake/pinocchio/pinocchioConfig.cmake")
+    message(FATAL_ERROR "Pinocchio installation not found: ${PROJECT_PINOCCHIO_PREFIX}")
+endif()
+list(PREPEND CMAKE_PREFIX_PATH "${PROJECT_PINOCCHIO_PREFIX}")
+find_package(pinocchio REQUIRED CONFIG)
+
+add_library(gravity_compensator SHARED src/gravity/gravity_compensator.cpp)
+target_include_directories(gravity_compensator PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(gravity_compensator PUBLIC pinocchio::pinocchio)
+
 # libusb 在项目上级目录中按架构分别暂存。
 set(LIBUSB_ROOT
         "${CMAKE_CURRENT_SOURCE_DIR}/../lib/libusb/stage-${U2CAN_ARCH}/usr")
@@ -63,15 +78,44 @@ set_target_properties(dm_device PROPERTIES
 # 主程序依赖达妙设备库和 libusb。
 add_executable(dm_main
         src/main.cpp
+        src/config/controller_config.cpp
         src/protocol/damiao.cpp
         src/protocol/usb_class.cpp
 )
 target_include_directories(dm_main PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+        "${PROJECT_PINOCCHIO_PREFIX}/include"
 )
-target_link_libraries(dm_main PRIVATE dm_device project_libusb)
+target_link_libraries(dm_main PRIVATE dm_device project_libusb gravity_compensator)
 
 # 设备序列号工具只依赖 libusb。
 add_executable(dev_sn src/dev_sn.cpp)
 target_link_libraries(dev_sn PRIVATE project_libusb)
+
+if(U2CAN_ARCH STREQUAL "x86_64")
+    add_executable(save_zero
+            src/save_zero.cpp
+            src/protocol/damiao.cpp
+            src/protocol/usb_class.cpp)
+    target_include_directories(save_zero PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/include"
+            "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+    target_link_libraries(save_zero PRIVATE dm_device project_libusb)
+endif()
+
+if(BUILD_TESTING AND U2CAN_ARCH STREQUAL "x86_64")
+    add_executable(controller_config_test
+            tests/controller_config_test.cpp src/config/controller_config.cpp)
+    target_include_directories(controller_config_test PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/include"
+            "${PROJECT_PINOCCHIO_PREFIX}/include")
+    add_test(NAME controller_config_test COMMAND controller_config_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/config/controller.ini"
+            "${CMAKE_CURRENT_SOURCE_DIR}/model/robot_urdf/robot.urdf")
+    add_executable(gravity_compensator_test tests/gravity_compensator_test.cpp)
+    target_link_libraries(gravity_compensator_test PRIVATE gravity_compensator)
+    add_test(NAME gravity_compensator_test COMMAND gravity_compensator_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/data/gravity_one_joint.urdf"
+            "${CMAKE_CURRENT_SOURCE_DIR}/model/robot_urdf/robot.urdf")
+endif()

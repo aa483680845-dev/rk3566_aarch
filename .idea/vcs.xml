@@ -3,5 +3,11 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/libusb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pinocchio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pinocchio-deps/src/console_bridge" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pinocchio-deps/src/tinyxml2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pinocchio-deps/src/urdfdom" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pinocchio-deps/src/urdfdom_headers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pinocchio/cmake" vcs="Git" />
   </component>
 </project>

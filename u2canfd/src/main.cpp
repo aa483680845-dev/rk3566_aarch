@@ -1,5 +1,11 @@
 #include "protocol/damiao.h"
+#include "gravity/gravity_compensator.h"
+#include "config/controller_config.h"
+#include <array>
+#include <chrono>
 #include <csignal>
+#include <mutex>
+#include <stdexcept>
 
 // 原子标志，用于安全地跨线程修改
 std::atomic<bool> running(true);
@@ -15,6 +21,8 @@ void signalHandler(int signum) {
 
 std::shared_ptr<damiao::Motor_Control> control;
 std::shared_ptr<damiao::Motor_Control> control2;
+std::mutex m_mutex;
+std::array<bool, 5> feedback_received{};
 
 void process_data(std::shared_ptr<damiao::Motor_Control> con, usb_rx_frame_t* frame)
 { 
@@ -43,6 +51,7 @@ void process_data(std::shared_ptr<damiao::Motor_Control> con, usb_rx_frame_t* fr
   }
   else
   {
+      if (frame->head.dlc < 6) return;
       int err = (int(frame->payload[0]) >> 4) & 0x0F;
       //这是正常返回的位置速度力矩数据
       uint16_t q_uint = (uint16_t(frame->payload[1]) << 8) | frame->payload[2];
@@ -63,11 +72,14 @@ void process_data(std::shared_ptr<damiao::Motor_Control> con, usb_rx_frame_t* fr
       m->second->receive_data(receive_q, receive_dq, receive_tau, err); 
 
       m->second->updateTimeInterval();
+      const uint16_t motor_id = m->second->GetCanId();
+      if (con == control && ch == CHANNEL0 && motor_id >= 1 && motor_id <= 5 && err == 0) {
+          feedback_received[motor_id - 1] = true;
+      }
   } 
  
 }
 
-std::mutex m_mutex;
 void canframeCallback(usb_rx_frame_t* frame)
 { 
   std::lock_guard<std::mutex> lock(m_mutex);
@@ -87,9 +99,13 @@ int main(int argc, char** argv)
   using duration = std::chrono::duration<double>;
 
   std::signal(SIGINT, signalHandler);
-
   try 
-  {   
+  {
+      if (argc != 1 && (argc != 3 || std::string(argv[1]) != "--config")) {
+          throw std::invalid_argument("Usage: dm_main [--config <path>]");
+      }
+      const auto config = controller_config::load(argc == 3 ?
+          std::filesystem::path(argv[2]) : controller_config::default_path());
       uint16_t canid1 = 0x01;
       uint16_t mstid1 = 0x11;
       uint16_t canid2 = 0x02;
@@ -103,9 +119,6 @@ int main(int argc, char** argv)
       uint16_t canid6 = 0x06;
       uint16_t mstid6 = 0x16;
       
-      uint32_t nom_baud =1000000;
-      uint32_t dat_baud =5000000;
-
       std::vector<damiao::DmActData> init_data;
 
       init_data.push_back(damiao::DmActData{.motorType = damiao::DM4310,
@@ -144,30 +157,64 @@ int main(int argc, char** argv)
                                             .mst_id=mstid6,
                                             .channel=CHANNEL0 });
       
+        const std::array<uint16_t, 5> joint_motor_ids{canid1, canid2, canid3, canid4, canid5};
+        std::vector<double> joint_limits;
+        for (std::size_t i = 0; i < joint_motor_ids.size(); ++i)
+            joint_limits.push_back(config.motors[i].torque_limit_nm);
+        gravity::GravityCompensator compensator(config.urdf_path.string(), joint_limits);
+        if (compensator.dof() != joint_motor_ids.size()) {
+            throw std::runtime_error("Robot URDF must have five active joints");
+        }
+        compensator.require_joint_order({"joint1", "joint2", "joint3", "joint4", "joint5"});
         control = std::make_shared<damiao::Motor_Control>(
-        DEV_USB2CANFD,nom_baud,dat_baud,"24B3E941BE0474C0E833BFF8F3C6EB68",&init_data);
+            config.device_type, config.nominal_baud, config.data_baud,
+            config.serial_number, &init_data);
         //接收回调函数注册
         device_hook_to_rec(control->getUSBHw()->getDeviceHandle(),canframeCallback);
 
-        // control2 = std::make_shared<damiao::Motor_Control>( 
-        // DEV_USB2CANFD,nom_baud,dat_baud,"14AA044B241402B10DDBDAFE448040BB",&init_data2);
-        // device_hook_to_rec(control2->getUSBHw()->getDeviceHandle(),canframeCallback2);
-
         control->enable_all();//使能该接口下的所有电机
         //control2->enable_all();//使能该接口下的所有电机
+      bool compensation_started = false;
+      bool feedback_wait_logged = false;
       while (running)
       {
-        const duration desired_duration(0.001); // 计算期望周期
+        const duration desired_duration(0.005); // 计算期望周期
         auto current_time = clock::now();
-       
-        control->control_mit(*control->getMotor(CHANNEL0,canid1), 0.0, 0.0, 0.0, 0.0, 0.0);
-        control->control_mit(*control->getMotor(CHANNEL0,canid2), 0.0, 0.0, 0.0, 0.0, 0.0);
-        control->control_mit(*control->getMotor(CHANNEL0,canid3), 0.0, 0.0, 0.0, 0.0, 0.0);
-        control->control_mit(*control->getMotor(CHANNEL0,canid4), 0.0, 0.0, 0.0, 0.0, 0.0);
-        control->control_mit(*control->getMotor(CHANNEL0,canid5), 0.0, 0.0, 0.0, 0.0, 0.0);
-        control->control_mit(*control->getMotor(CHANNEL0,canid6), 0.0, 0.0, 0.0, 0.0, 0.0);
+        std::vector<double> joint_positions;
+        joint_positions.reserve(joint_motor_ids.size());
+        bool feedback_ready = true;
+        {
+          std::lock_guard<std::mutex> lock(m_mutex);
+          for (std::size_t i = 0; i < joint_motor_ids.size(); ++i) {
+            // if (control->getMotor(CHANNEL0, joint_motor_ids[i])->Get_Err() != 0) {
+            //   throw std::runtime_error("Motor fault reported by motor " +
+            //                            std::to_string(joint_motor_ids[i]));
+            // }
+            if (!feedback_received[i]) {
+              feedback_ready = false;
+            }
+            joint_positions.push_back(control->getMotor(CHANNEL0, joint_motor_ids[i])->Get_Position());
+          }
+        }
+        std::vector<double> gravity_torque(joint_motor_ids.size(), 0.0);
+        if (feedback_ready) {
+          gravity_torque = compensator.compute(joint_positions);
+          if (!compensation_started) {
+            std::cerr << "Feedback received from motors 1-5; gravity compensation started.\n";
+          }
+          compensation_started = true;
+        } else if (!feedback_wait_logged) {
+          std::cerr << "Waiting for motor feedback; sending zero feedforward torque.\n";
+          feedback_wait_logged = true;
+        }
+        control->control_mit(*control->getMotor(CHANNEL0,canid1), 0.0, config.motors[0].kd, 0.0, 0.0, gravity_torque[0]);
+        control->control_mit(*control->getMotor(CHANNEL0,canid2), 0.0, config.motors[1].kd, 0.0, 0.0, gravity_torque[1]);
+        control->control_mit(*control->getMotor(CHANNEL0,canid3), 0.0, config.motors[2].kd, 0.0, 0.0, gravity_torque[2]);
+        control->control_mit(*control->getMotor(CHANNEL0,canid4), 0.0, config.motors[3].kd, 0.0, 0.0, gravity_torque[3]);
+        control->control_mit(*control->getMotor(CHANNEL0,canid5), 0.0, config.motors[4].kd, 0.0, 0.0, gravity_torque[4]);
+        control->control_mit(*control->getMotor(CHANNEL0,canid6), 0.0, config.motors[5].kd, 0.0, 0.0, 0.0);
 
-        for(uint16_t id = 1;id<=1;id++)
+        for(uint16_t id = 1;id<=6;id++)
         {
           float pos=control->getMotor(CHANNEL0,id)->Get_Position();
           float vel=control->getMotor(CHANNEL0,id)->Get_Velocity();
@@ -176,18 +223,6 @@ int main(int argc, char** argv)
           double time=control->getMotor(CHANNEL0,id)->getTimeInterval();
           std::cerr<<"id is: "<<id<<" pos: "<<pos<<" vel: "<<vel<<" effort: "<<tau<<" err: "<<err<<std::dec<<" time(s): "<<time<<std::endl;
         }
-        
-        // for(uint16_t id = 1;id<=1;id++)
-        // {
-        //   float pos=control->getMotor(CHANNEL1,id)->Get_Position();
-        //   float vel=control->getMotor(CHANNEL1,id)->Get_Velocity();
-        //   float tau=control->getMotor(CHANNEL1,id)->Get_tau();
-        //   double time=control->getMotor(CHANNEL1,id)->getTimeInterval();
-        //   std::cerr<<"id is: "<<id<<" pos: "<<pos<<" vel: "<<vel<<" effort: "<<tau<<" time(s): "<<time<<std::endl;
-        // }
-
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        
         const auto sleep_till = current_time + std::chrono::duration_cast<clock::duration>(desired_duration);
         std::this_thread::sleep_until(sleep_till);    
       }

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot name="gravity_one_joint">
+  <link name="base"/>
+  <link name="arm">
+    <inertial>
+      <origin xyz="0.5 0 0" rpy="0 0 0"/>
+      <mass value="2"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+  <joint name="hinge" type="revolute">
+    <parent link="base"/>
+    <child link="arm"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.14" upper="3.14" effort="20" velocity="10"/>
+  </joint>
+</robot>

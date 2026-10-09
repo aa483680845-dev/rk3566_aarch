@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "sourceFile": "robot.urdf",
+  "layout": {
+    "base": {
+      "x": 60.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "link1": {
+      "x": 600.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "link2": {
+      "x": 1140.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "link3": {
+      "x": 1680.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "link4": {
+      "x": 2220.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "link5": {
+      "x": 2760.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "joint1": {
+      "x": 340.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "joint2": {
+      "x": 880.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "joint3": {
+      "x": 1420.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "joint4": {
+      "x": 1960.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    },
+    "joint5": {
+      "x": 2500.0,
+      "y": 60.0,
+      "rotation": 0,
+      "flipH": false
+    }
+  },
+  "annotations": [],
+  "analysisPoints": [],
+  "loggedSignals": []
+}

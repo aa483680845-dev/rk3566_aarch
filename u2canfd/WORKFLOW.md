@@ -7,9 +7,9 @@
 
 程序测试环境是gcc13。
 
-程序默认运行的效果是使用**USB转双路CANFD设备*先让canid为0x01、mstid为0x11的DM4310电机控制模式设置为MIT模式，然后使能，然后旋转，**电机波特率为5M**。
+`dm_main` 默认使用双路 USB-CANFD，六个电机采用 MIT 模式；两档 CANFD 波特率默认均为 1 Mbit/s。运行参数见 [README.md](README.md)。
 
-***注意：5M波特率下，电机有多个时，需要在末端电机接一个120欧的电阻***
+多个电机连接时，请按实际 CAN 总线布线要求安装终端电阻。
 
 ## 软件架构
 使用c++语言，没有用到ros
@@ -38,7 +38,7 @@ cmake ..
 make
 ```
 ## 简单使用
-首先用最新上位机给电机设置5M波特率。
+首先确认电机通信波特率与 `config/controller.ini` 中的两档波特率一致。
 
 然后给**USB转CANFD设备**设置权限，在终端输入：
 ```shell
@@ -67,21 +67,18 @@ cd ~/catkin_ws/u2canfd/build
 
 上面图片里的SN后面的一串数字就是该设备的的Serial_Number，
 
-接着复制该Serial\_Number，打开main.cpp，替换程序里的Serial\_Number，同时选择是**USB转单路CANFD**还是**双路CANFD**，如下图所示：
+接着复制该 Serial Number，填写到 `u2canfd/config/controller.ini` 的 `[device] serial_number`，并在同一节设置 `device_type` 为 `DEV_USB2CANFD` 或 `DEV_USB2CANFD_DUAL`。
 
 <img src="./docs/motor_control.png" width="850" height="auto">
 
-然后重新编译，打开终端输入：
-```shell
-cd ~/catkin_ws/u2canfd/build
-make
-```
+修改 INI 后只需重启 `dm_main`，无需重新编译。URDF 路径在 `[model] urdf_path` 中填写；相对路径从 INI 所在目录计算。
 
 在你刚刚编译的build文件夹中打开终端运行dm_main文件:
 ```shell
 cd ~/catkin_ws/u2canfd/build
 ./dm_main
 ```
+默认配置位于可执行文件所在目录的上一级 `config/controller.ini`。也可运行 `./dm_main --config /path/to/controller.ini`。RK3566 压缩包中的配置位于 `u2canfd-rk3566-aarch64/config/controller.ini`，在包目录运行 `./run.sh`，也支持相同的 `--config` 参数。
 此时你会发现电机亮绿灯，并且旋转
 
 ## 默认电机配置
