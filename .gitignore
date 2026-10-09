@@ -1,0 +1,11 @@
+/lib/pinocchio-deps/downloads/
+/lib/pinocchio-deps/src/boost_1_83_0/
+/lib/pinocchio-deps/build-*/
+/lib/pinocchio-deps/smoke-build-*/
+/lib/pinocchio-deps/*.log
+/lib/pinocchio/build-*/
+/lib/libusb/build-*/
+/lib/libusb/stage-*/
+/lib/pinocchio/stage-*/
+/u2canfd/cmake-build-*/
+__pycache__/

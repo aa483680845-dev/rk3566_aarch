@@ -1,0 +1,18 @@
+[submodule "lib/libusb"]
+	path = lib/libusb
+	url = https://github.com/libusb/libusb.git
+[submodule "lib/pinocchio"]
+	path = lib/pinocchio
+	url = https://github.com/stack-of-tasks/pinocchio.git
+[submodule "lib/pinocchio-deps/src/console_bridge"]
+	path = lib/pinocchio-deps/src/console_bridge
+	url = https://github.com/ros/console_bridge.git
+[submodule "lib/pinocchio-deps/src/tinyxml2"]
+	path = lib/pinocchio-deps/src/tinyxml2
+	url = https://github.com/leethomason/tinyxml2.git
+[submodule "lib/pinocchio-deps/src/urdfdom"]
+	path = lib/pinocchio-deps/src/urdfdom
+	url = https://github.com/ros/urdfdom.git
+[submodule "lib/pinocchio-deps/src/urdfdom_headers"]
+	path = lib/pinocchio-deps/src/urdfdom_headers
+	url = https://github.com/ros/urdfdom_headers.git
